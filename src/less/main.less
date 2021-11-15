@@ -1,0 +1,22 @@
+html,
+body {
+  @apply h-full overflow-hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  @apply bg-indigo-200;
+}
+
+h1 {
+  @apply font-extrabold text-6xl text-gray-600 block text-center py-5 filter drop-shadow-xl;
+}
+
+#app {
+  @apply flex flex-col w-full items-center justify-center p-10;
+
+  canvas {
+    @apply w-96 h-96 border rounded shadow-lg bg-white;
+  }
+}
