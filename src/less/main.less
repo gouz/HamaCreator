@@ -16,7 +16,15 @@ h1 {
 #app {
   @apply flex flex-col w-full items-center justify-center p-10;
 
-  canvas {
-    @apply w-96 h-96 border rounded shadow-lg bg-white;
+  #mockup {
+    @apply rounded shadow-lg bg-white relative transition-all duration-300;
+
+    &:hover {
+      @apply bg-opacity-20 bg-green-100 shadow-2xl;
+    }
+  }
+
+  #temp {
+    @apply hidden;
   }
 }
