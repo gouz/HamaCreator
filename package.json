@@ -25,7 +25,7 @@
     "@parcel/compressor-gzip": "2.0.1",
     "@parcel/transformer-less": "2.0.1",
     "@parcel/transformer-pug": "2.0.1",
-    "@prettier/plugin-pug": "1.17.1",
+    "@prettier/plugin-pug": "1.17.2",
     "autoprefixer": "10.4.0",
     "cssnano-preset-advanced": "5.1.6",
     "parcel": "2.0.1",
