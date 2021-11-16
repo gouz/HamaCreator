@@ -1,24 +1,71 @@
 import '../css/main.css';
 import '../less/main.less';
 
-const canvas = document.querySelector('#mockup');
-const context = canvas.getContext('2d');
+const $canvas = document.querySelector('#mockup');
+const context = $canvas.getContext('2d');
 const img = document.createElement('img');
-const tempCanvas = document.querySelector('#temp');
-const tempContext = tempCanvas.getContext('2d');
+const $tempCanvas = document.querySelector('#temp');
+const tempContext = $tempCanvas.getContext('2d');
 
-const nbX = 1;
-const nbY = 1;
+const $horizontal = document.querySelector('#horizontal');
+const $vertical = document.querySelector('#vertical');
+
+let nbX = 1;
+let nbY = 1;
 
 let palette = [];
+const $palette = document.querySelector('#palette');
+
+let toggled = true;
+
 fetch('./list.json')
   .then((response) => {
     return response.json();
   })
   .then((json) => {
+    $palette.innerHTML = '';
     for (let i = 0; i < json.palette.length; i++) {
       palette.push(json.palette[i].color);
+      $palette.innerHTML += `
+        <label title="${json.palette[i].label}">
+          <input class="color-picked" type="checkbox" value="${json.palette[i].color}" checked />
+          <span class="border">
+            <span class="color" style="background-color: ${json.palette[i].color};"></span>
+            <span class="number">${json.palette[i].num}</span>
+            </span>
+          <span class="sr-only">${json.palette[i].label}</span>
+        </label>
+      `;
     }
+    $palette.innerHTML += `<button id="toggle">Aucun</button>`;
+
+    document.querySelector('#toggle').addEventListener(
+      'click',
+      () => {
+        document.querySelectorAll('.color-picked').forEach((e) => {
+          e.checked = toggled;
+          e.click();
+        });
+        if (!toggled) {
+          document.querySelector('#toggle').innerHTML = 'Aucun';
+        } else {
+          document.querySelector('#toggle').innerHTML = 'Tous';
+        }
+        toggled = !toggled;
+      },
+      false
+    );
+
+    document.querySelectorAll('.color-picked').forEach((e) => {
+      e.addEventListener(
+        'click',
+        () => {
+          if (e.checked) palette.push(e.value);
+          else palette.splice(palette.indexOf(e.value), 1);
+        },
+        false
+      );
+    });
   });
 
 const findColor = (rgb) => {
@@ -40,22 +87,30 @@ const findColor = (rgb) => {
 };
 
 const clearCanvas = () => {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  tempContext.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+  context.clearRect(0, 0, $canvas.width, $canvas.height);
+  tempContext.clearRect(0, 0, $tempCanvas.width, $tempCanvas.height);
+};
+
+const redrawCanvas = () => {
+  if (nbX > nbY) {
+    $canvas.width = 580;
+    $canvas.height = (580 * nbY) / nbX;
+  } else {
+    $canvas.width = (580 * nbX) / nbY;
+    $canvas.height = 580;
+  }
 };
 
 const redim = () => {
-  tempCanvas.width = nbX * 29;
-  tempCanvas.height = nbY * 29;
-  canvas.width = nbX * 580;
-  canvas.height = nbY * 580;
+  $tempCanvas.width = nbX * 29;
+  $tempCanvas.height = nbY * 29;
   let newWidth = img.width;
   let newHeight = img.height;
-  newHeight *= tempCanvas.width / newWidth;
-  newWidth = tempCanvas.width;
-  if (newHeight > tempCanvas.height) {
-    newWidth *= tempCanvas.height / newHeight;
-    newHeight = tempCanvas.height;
+  newHeight *= $tempCanvas.width / newWidth;
+  newWidth = $tempCanvas.width;
+  if (newHeight > $tempCanvas.height) {
+    newWidth *= $tempCanvas.height / newHeight;
+    newHeight = $tempCanvas.height;
   }
   tempContext.drawImage(
     img,
@@ -63,29 +118,38 @@ const redim = () => {
     0,
     img.width,
     img.height,
-    (tempCanvas.width - newWidth) / 2,
-    (tempCanvas.height - newHeight) / 2,
+    ($tempCanvas.width - newWidth) / 2,
+    ($tempCanvas.height - newHeight) / 2,
     newWidth,
     newHeight
   );
 };
 
 const draw = () => {
-  for (let x = 0; x < tempCanvas.width; x++)
-    for (let y = 0; y < tempCanvas.height; y++) {
-      const data = tempContext.getImageData(x, y, 1, 1).data;
-      context.beginPath();
-      context.arc(
-        (10 + x * 20) / nbX,
-        (10 + y * 20) / nbY,
-        8 / nbX,
-        0,
-        2 * Math.PI
-      );
-      context.lineWidth = 5 / nbX;
-      context.strokeStyle = findColor(data);
-      context.stroke();
-    }
+  if (palette.length) {
+    for (let x = 0; x < $tempCanvas.width; x++)
+      for (let y = 0; y < $tempCanvas.height; y++) {
+        const data = tempContext.getImageData(x, y, 1, 1).data;
+        if (data[3] != 0) {
+          // no transparent
+          context.beginPath();
+          let div = nbX;
+          if (nbY > nbX) div = nbY;
+          context.arc(
+            (10 + x * 20) / div,
+            (10 + y * 20) / div,
+            8 / div,
+            0,
+            2 * Math.PI
+          );
+          context.lineWidth = 5 / div;
+          context.strokeStyle = findColor(data);
+          context.stroke();
+        }
+      }
+  } else {
+    alert('Pas de coloris sélectionné');
+  }
 };
 
 img.addEventListener(
@@ -98,7 +162,7 @@ img.addEventListener(
   false
 );
 
-canvas.addEventListener(
+$canvas.addEventListener(
   'dragover',
   (e) => {
     e.preventDefault();
@@ -106,7 +170,7 @@ canvas.addEventListener(
   false
 );
 
-canvas.addEventListener(
+$canvas.addEventListener(
   'drop',
   (e) => {
     const files = e.dataTransfer.files;
@@ -124,6 +188,24 @@ canvas.addEventListener(
       }
     }
     e.preventDefault();
+  },
+  false
+);
+
+$horizontal.addEventListener(
+  'click',
+  () => {
+    nbX = $horizontal.value;
+    redrawCanvas();
+  },
+  false
+);
+
+$vertical.addEventListener(
+  'click',
+  () => {
+    nbY = $vertical.value;
+    redrawCanvas();
   },
   false
 );

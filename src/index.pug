@@ -8,8 +8,25 @@ html(lang='en')
     link(rel='icon', type='image/svg+xml', href='./img/favicon.svg')
   body
     h1 HamaCreator
+    p Glisser une image sur la zone blanche
     #app
-      canvas#mockup(width='580px', height='580px')
-      canvas#temp(width='29px', height='29px')
-
+      #pegboard
+        #mockupwrapper
+          canvas#mockup(width='580px', height='580px')
+        .form
+          span Nombre de plaque(s)
+          label(for='horizontal') Horizontale(s)
+          input#horizontal(type='number', value='1', min='1')
+          label(for='vertical') Verticale(s)
+          input#vertical(type='number', value='1', min='1')
+      #config
+        p Choisissez vos coloris disponibles
+        #palette
+          label
+            input(type='checkbox')
+            span.border
+              span.color
+              span.number
+            span.sr-only
+    canvas#temp(width='29px', height='29px')
     script(src='./js/main.js', type='module')
