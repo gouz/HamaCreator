@@ -161,7 +161,7 @@ const draw = () => {
           if (typeof instructionsCollection[col] === 'undefined')
             instructionsCollection[col] = 0;
           instructionsCollection[col]++;
-          grid += fullPalette[col].code;
+          grid += `<i style="color: ${fullPalette[col].color}">${fullPalette[col].code}</i>`;
           context.stroke();
         } else grid += '&nbsp;';
       }
@@ -175,14 +175,16 @@ const draw = () => {
 const generateInstructions = () => {
   if (grid != '') {
     let stats = [];
+    let nb = 0;
     for (const key in instructionsCollection) {
       stats.push(
-        `(${fullPalette[key].num}) ${fullPalette[key].label} [<span class="key">${fullPalette[key].code}</span>] : ${instructionsCollection[key]}`
+        `(${fullPalette[key].num}) ${fullPalette[key].label} [<span class="key" style="color: ${fullPalette[key].color}">${fullPalette[key].code}</span>] : ${instructionsCollection[key]}`
       );
+      nb += instructionsCollection[key];
     }
     stats.sort();
     $instructions.innerHTML = `
-      <p>Nombre de perles à utiliser</p>
+      <p>Nombre de perles à utiliser (${nb})</p>
       <ul>
         <li>${stats.join('</li><li>')}</li>
       </ul>
@@ -222,6 +224,7 @@ $canvas.addEventListener(
         typeof FileReader !== 'undefined' &&
         file.type.indexOf('image') != -1
       ) {
+        $instructions.innerHTML = '';
         $spinner.style.display = 'block';
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -236,7 +239,7 @@ $canvas.addEventListener(
 );
 
 $horizontal.addEventListener(
-  'click',
+  'input',
   () => {
     nbX = $horizontal.value;
     redrawCanvas();
@@ -245,7 +248,7 @@ $horizontal.addEventListener(
 );
 
 $vertical.addEventListener(
-  'click',
+  'input',
   () => {
     nbY = $vertical.value;
     redrawCanvas();
