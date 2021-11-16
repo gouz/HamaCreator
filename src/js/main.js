@@ -111,6 +111,7 @@ const redrawCanvas = () => {
     $canvas.width = (580 * nbX) / nbY;
     $canvas.height = 580;
   }
+  $instructions.innerHTML = '';
 };
 
 const redim = () => {
