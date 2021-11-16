@@ -12,7 +12,7 @@ module.exports = {
     corePlugins: {
       float: false,
     },
-    safelist: ['button'],
+    safelist: ['button', 'ul', 'li', 'key'],
   },
   darkMode: false, // or 'media' or 'class'
   theme: {

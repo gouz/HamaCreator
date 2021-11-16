@@ -14,11 +14,19 @@ let nbX = 1;
 let nbY = 1;
 
 let palette = [];
+let fullPalette = {};
+let instructionsCollection = {};
 const $palette = document.querySelector('#palette');
 
 const $spinner = document.querySelector('#spinner');
 
+const $instructions = document.querySelector('#instructions');
+
+const codes =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/$!?';
+
 let toggled = true;
+let grid;
 
 fetch('./list.json')
   .then((response) => {
@@ -27,6 +35,8 @@ fetch('./list.json')
   .then((json) => {
     $palette.innerHTML = '';
     for (let i = 0; i < json.palette.length; i++) {
+      fullPalette[json.palette[i].color] = json.palette[i];
+      fullPalette[json.palette[i].color].code = codes.charAt(i);
       palette.push(json.palette[i].color);
       $palette.innerHTML += `
         <label title="${json.palette[i].label}">
@@ -129,8 +139,9 @@ const redim = () => {
 
 const draw = () => {
   if (palette.length) {
-    for (let x = 0; x < $tempCanvas.width; x++)
-      for (let y = 0; y < $tempCanvas.height; y++) {
+    grid = '';
+    for (let y = 0; y < $tempCanvas.height; y++) {
+      for (let x = 0; x < $tempCanvas.width; x++) {
         const data = tempContext.getImageData(x, y, 1, 1).data;
         if (data[3] != 0) {
           // no transparent
@@ -145,13 +156,40 @@ const draw = () => {
             2 * Math.PI
           );
           context.lineWidth = 5 / div;
-          context.strokeStyle = findColor(data);
+          const col = findColor(data);
+          context.strokeStyle = col;
+          if (typeof instructionsCollection[col] === 'undefined')
+            instructionsCollection[col] = 0;
+          instructionsCollection[col]++;
+          grid += fullPalette[col].code;
           context.stroke();
-        }
+        } else grid += '&nbsp;';
       }
+      grid += '<br />';
+    }
   } else {
     alert('Pas de coloris sélectionné');
   }
+};
+
+const generateInstructions = () => {
+  if (grid != '') {
+    let stats = [];
+    for (const key in instructionsCollection) {
+      stats.push(
+        `(${fullPalette[key].num}) ${fullPalette[key].label} [<span class="key">${fullPalette[key].code}</span>] : ${instructionsCollection[key]}`
+      );
+    }
+    stats.sort();
+    $instructions.innerHTML = `
+      <p>Nombre de perles à utiliser</p>
+      <ul>
+        <li>${stats.join('</li><li>')}</li>
+      </ul>
+      <p>Instructions</p>
+      <p class="key">${grid}</p>
+    `;
+  } else $instructions.innerHTML = '';
 };
 
 img.addEventListener(
@@ -160,6 +198,7 @@ img.addEventListener(
     clearCanvas();
     redim();
     draw();
+    generateInstructions();
     $spinner.style.display = 'none';
   },
   false
