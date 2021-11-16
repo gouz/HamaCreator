@@ -24,6 +24,12 @@ p {
   @apply flex flex-row w-full items-center justify-center p-10;
 
   #pegboard {
+    @apply relative;
+
+    #spinner {
+      @apply absolute z-10 hidden;
+    }
+
     #mockupwrapper {
       @apply flex items-center justify-center;
       width: 580px;
@@ -89,3 +95,5 @@ p {
     }
   }
 }
+
+@import './spinner.less';

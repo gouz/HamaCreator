@@ -16,6 +16,8 @@ let nbY = 1;
 let palette = [];
 const $palette = document.querySelector('#palette');
 
+const $spinner = document.querySelector('#spinner');
+
 let toggled = true;
 
 fetch('./list.json')
@@ -158,6 +160,7 @@ img.addEventListener(
     clearCanvas();
     redim();
     draw();
+    $spinner.style.display = 'none';
   },
   false
 );
@@ -180,6 +183,7 @@ $canvas.addEventListener(
         typeof FileReader !== 'undefined' &&
         file.type.indexOf('image') != -1
       ) {
+        $spinner.style.display = 'block';
         const reader = new FileReader();
         reader.onload = (e) => {
           img.src = e.target.result;
