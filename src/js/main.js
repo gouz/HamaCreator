@@ -25,8 +25,8 @@ const $instructions = document.querySelector('#instructions');
 const codes =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/$!?';
 
-let toggled = true;
-let grid;
+//let toggled = true;
+let grid = '';
 
 fetch('./list.json')
   .then((response) => {

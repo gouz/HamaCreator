@@ -9,21 +9,19 @@ html(lang='en')
   body
     h1 HamaCreator
     p Glisser une image sur la zone blanche
+    a#donate(
+      href='https://www.paypal.com/donate/?business=JF54R2TL8PZ66&no_recurring=1&currency_code=EUR',
+      target='_blank',
+      rel='noopener noreferrer'
+    ) Faire un don
     #app
       #pegboard
         #mockupwrapper
           canvas#mockup(width='580px', height='580px')
           #spinner
             .lds-grid
-              div
-              div
-              div
-              div
-              div
-              div
-              div
-              div
-              div
+              - for (var x = 0; x < 8; x++)
+                div
         .form
           span Nombre de plaque(s)
           label(for='horizontal') Horizontale(s)
@@ -31,7 +29,7 @@ html(lang='en')
           label(for='vertical') Verticale(s)
           input#vertical(type='number', value='1', min='1')
       #config
-        p Choisissez vos coloris disponibles
+        p Choisissez vos coloris disponibles (tous par défaut)
         #palette
           label
             input(type='checkbox')

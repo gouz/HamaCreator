@@ -1,0 +1,75 @@
+#app {
+  @apply flex flex-row w-full items-start justify-center p-10;
+
+  #pegboard {
+    @apply relative;
+
+    #spinner {
+      @apply absolute z-10 hidden;
+    }
+
+    #mockupwrapper {
+      @apply flex items-center justify-center;
+      width: 580px;
+      height: 580px;
+
+      #mockup {
+        @apply rounded shadow-lg bg-white relative transition-all duration-300;
+
+        &:hover {
+          @apply bg-opacity-20 bg-green-100 shadow-2xl;
+        }
+      }
+    }
+
+    .form {
+      @apply flex items-center justify-around mt-2;
+
+      span {
+        @apply flex-grow;
+      }
+
+      label {
+        @apply ml-2;
+      }
+
+      input {
+        @apply rounded-lg h-8 w-20 bg-white px-2 ml-2 text-center;
+      }
+    }
+  }
+
+  #palette {
+    @apply max-w-md flex flex-wrap p-2;
+
+    label {
+      @apply inline-block cursor-pointer m-1;
+      input {
+        @apply hidden;
+      }
+
+      .border {
+        @apply w-12 h-12 block rounded-full relative duration-300 transition-all;
+
+        .color {
+          @apply w-full h-full block rounded-full;
+        }
+        .number {
+          @apply absolute text-xs text-white bg-blue-700 rounded-full p-1 w-6 h-6 flex items-center justify-center font-bold -top-1 -right-1 z-10 bg-opacity-25 duration-300 transition-all;
+        }
+      }
+
+      input:checked ~ .border {
+        @apply shadow-lg  border-2 border-white;
+
+        .number {
+          @apply bg-opacity-100;
+        }
+      }
+    }
+
+    button {
+      @apply rounded-lg text-white font-bold bg-blue-500 mx-2 px-4 my-2;
+    }
+  }
+}
