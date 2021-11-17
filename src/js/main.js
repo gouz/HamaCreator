@@ -49,8 +49,8 @@ fetch('./list.json')
         </label>
       `;
     }
-    $palette.innerHTML += `<button id="toggle">Aucun</button>`;
-
+    //$palette.innerHTML += `<button id="toggle">Aucun</button>`;
+    /*
     document.querySelector('#toggle').addEventListener(
       'click',
       () => {
@@ -69,6 +69,7 @@ fetch('./list.json')
       },
       false
     );
+    */
 
     document.querySelectorAll('.color-picked').forEach((e) => {
       e.addEventListener(
