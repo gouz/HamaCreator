@@ -61,6 +61,7 @@ fetch('./list.json')
         if (!toggled) {
           document.querySelector('#toggle').innerHTML = 'Aucun';
           draw();
+          generateInstructions();
         } else {
           document.querySelector('#toggle').innerHTML = 'Tous';
         }
@@ -76,6 +77,7 @@ fetch('./list.json')
           if (e.checked) palette.push(e.value);
           else palette.splice(palette.indexOf(e.value), 1);
           draw();
+          generateInstructions();
         },
         false
       );
@@ -143,6 +145,7 @@ const redim = () => {
 const draw = () => {
   if (palette.length) {
     grid = '';
+    instructionsCollection = {};
     for (let y = 0; y < $tempCanvas.height; y++) {
       for (let x = 0; x < $tempCanvas.width; x++) {
         const data = tempContext.getImageData(x, y, 1, 1).data;
