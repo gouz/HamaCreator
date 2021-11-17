@@ -60,6 +60,7 @@ fetch('./list.json')
         });
         if (!toggled) {
           document.querySelector('#toggle').innerHTML = 'Aucun';
+          draw();
         } else {
           document.querySelector('#toggle').innerHTML = 'Tous';
         }
@@ -74,6 +75,7 @@ fetch('./list.json')
         () => {
           if (e.checked) palette.push(e.value);
           else palette.splice(palette.indexOf(e.value), 1);
+          draw();
         },
         false
       );
