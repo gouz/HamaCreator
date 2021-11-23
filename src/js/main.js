@@ -103,9 +103,22 @@ const findColor = (rgb) => {
   return resColor;
 };
 
+const drawDots = () => {
+  for (let x = 0; x < 29 * nbX; x++)
+    for (let y = 0; y < 29 * nbY; y++) {
+      let div = nbX;
+      if (nbY > nbX) div = nbY;
+      context.beginPath();
+      context.fillStyle = '#999999';
+      context.fillRect((10 + x * 20) / div, (10 + y * 20) / div, 1, 1);
+      context.stroke();
+    }
+};
+
 const clearCanvas = () => {
   context.clearRect(0, 0, $canvas.width, $canvas.height);
   tempContext.clearRect(0, 0, $tempCanvas.width, $tempCanvas.height);
+  drawDots();
 };
 
 const redrawCanvas = () => {
@@ -116,7 +129,12 @@ const redrawCanvas = () => {
     $canvas.width = (580 * nbX) / nbY;
     $canvas.height = 580;
   }
+  drawDots();
   $instructions.innerHTML = '';
+  if ('' != img.src) {
+    $spinner.style.display = 'block';
+    imgTreatment();
+  }
 };
 
 const redim = () => {
@@ -201,14 +219,18 @@ const generateInstructions = () => {
   } else $instructions.innerHTML = '';
 };
 
+const imgTreatment = () => {
+  clearCanvas();
+  redim();
+  draw();
+  generateInstructions();
+  $spinner.style.display = 'none';
+};
+
 img.addEventListener(
   'load',
   () => {
-    clearCanvas();
-    redim();
-    draw();
-    generateInstructions();
-    $spinner.style.display = 'none';
+    imgTreatment();
   },
   false
 );
@@ -262,3 +284,7 @@ $vertical.addEventListener(
   },
   false
 );
+
+window.addEventListener('load', () => {
+  redrawCanvas();
+});
