@@ -8,7 +8,7 @@ html(lang='en')
     link(rel='icon', type='image/svg+xml', href='./img/favicon.svg')
   body
     h1 HamaCreator
-    p Glisser une image sur la zone blanche
+    p Glissez une image sur la zone blanche, ou cliquez dessus
     #app
       #pegboard
         #mockupwrapper
@@ -34,6 +34,7 @@ html(lang='en')
             span.sr-only
     #instructions
     canvas#temp(width='29px', height='29px')
+    input#loadimg(type='file')
     script(src='./js/main.js', type='module')
     script(
       data-name='BMC-Widget',
