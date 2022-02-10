@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/gouz/hama#readme",
   "devDependencies": {
-    "@parcel/compressor-brotli": "2.3.0",
+    "@parcel/compressor-brotli": "2.3.1",
     "@parcel/compressor-gzip": "2.3.0",
     "@parcel/transformer-less": "2.3.0",
     "@parcel/transformer-pug": "2.3.0",
