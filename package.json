@@ -26,7 +26,7 @@
     "@parcel/transformer-less": "2.3.2",
     "@parcel/transformer-pug": "2.3.2",
     "@prettier/plugin-pug": "1.19.3",
-    "autoprefixer": "10.4.2",
+    "autoprefixer": "10.4.4",
     "cssnano-preset-advanced": "5.2.1",
     "parcel": "2.3.2",
     "postcss": "8.4.8",
